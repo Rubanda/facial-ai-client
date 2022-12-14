@@ -8,6 +8,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 import axios from 'axios';
 import { poster } from '../component/fetchet';
 import toast from 'react-hot-toast';
+import getConfig from 'next/config';
 
 let img = '/neu.jpeg';
 const label_map = [
