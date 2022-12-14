@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from "axios"
-import { getError } from "./error"
  export type QueryResponse = {data:any}
 
 
