@@ -27,7 +27,7 @@ const Home: NextPage = () => {
   const [res, setRes] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [screenShot, setScreenShot] = useState<any>(null);
-  const [showCamera, setShowCamera] = useState<boolean>(true);
+  const [showCamera, setShowCamera] = useState<boolean>(false);
 
   const webcamRef: any = React.useRef(null);
 
@@ -38,11 +38,16 @@ const Home: NextPage = () => {
   }, [webcamRef]);
   const uploadImage = async (event: any) => {
     event.preventDefault();
+    if (image == null) {
+      toast.error('upload image first')
+      return
+    }
     const body = new FormData();
     body.append('file', image);
     const data: any = await poster(`${process.env.API_URL}/upload-file/`, body);
     if (data.status === 200) toast.success('image sent ');
     setRes(data);
+    setScreenShot(null)
   };
 
   const uploadToClient = async (event: any) => {
@@ -57,10 +62,15 @@ const Home: NextPage = () => {
   };
   const sendToBackend = async (event: any) => {
     event.preventDefault();
+    if (screenShot == null) {
+      toast.error('take image first')
+      return
+    }
     const body = new FormData();
     body.append('file', screenShot);
     const data: any = await poster(`${process.env.API_URL}/upload/`, body);
     if (data.status === 200) toast.success('sent photo to Analyze');
+    setImage(null)
   };
   const Analyze = async (event: any) => {
     event.preventDefault();
@@ -91,7 +101,7 @@ const Home: NextPage = () => {
               Image
             </code>
           </p>
-          <em>Please use Human face</em>
+          <em className='underline decoration-sky-500'>Please use Human face</em>
           <div className='mt-6 grid grid-cols-1 md:grid-cols-3 max-w-6xl flex-1 flex-wrap gap-4 '>
             <div className='col-span-2'>
               {screenShot ? (
@@ -157,7 +167,7 @@ const Home: NextPage = () => {
               <button
                 className='mt-6 w-full border p-2 text-center rounded-xl bg-black text-white hover:text-violet-600 focus:text-violet-600'
                 onClick={Analyze}
-                
+
               >
                 {loading ? (<p>Loading...</p>) : 'ANALYZE'}
               </button>
